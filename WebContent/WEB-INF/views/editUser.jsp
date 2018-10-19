@@ -11,15 +11,12 @@
 <!-- CSS  -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	rel="stylesheet">
-<link href="css/materialize.css" type="text/css" rel="stylesheet"
-	media="screen,projection" />
-<link href="css/style.css" type="text/css" rel="stylesheet"
-	media="screen,projection" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 <body>
 	<nav class="deep-orange darken-4" role="navigation">
 		<div class="nav-wrapper container">
-			<a id="logo-container" href="./index.jsp" class="brand-logo">Holy
+			<a id="logo-container" href="index" class="brand-logo">Holy
 				Note</a>
 			<ul class="right">
 			</ul>
@@ -93,8 +90,13 @@
 
 	<!--  Scripts-->
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script src="js/materialize.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 	<script src="js/init.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$(".dropdown-trigger").dropdown();
+		});
+	</script>
 
 </body>
 </html>

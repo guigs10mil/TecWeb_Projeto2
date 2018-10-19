@@ -1,0 +1,20 @@
+User:
+
+create table User(
+id_user INT(11) NOT NULL Primary Key auto_increment, 
+name VARCHAR(50) NOT NULL UNIQUE,
+password VARCHAR(50) NOT NULL
+);
+
+
+Note:
+
+create table Note(
+id_note INT(11) NOT NULL Primary Key auto_increment,
+color VARCHAR(10) NOT NULL,
+date_created BIGINT(20) NOT NULL,
+text TEXT NOT NULL,
+id_user INT(11) NOT NULL,
+label VARCHAR(15),
+FOREIGN KEY (id_user) REFERENCES User(id_user)
+);

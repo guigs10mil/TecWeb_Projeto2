@@ -1,4 +1,4 @@
-package keep;
+package mvc.model;
 public class User {
 	private Integer id;
 	private String name;

@@ -1,4 +1,4 @@
-package keep;
+package mvc.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -151,7 +151,7 @@ public class DAO {
 	}
 
 	public void addUser(User user) {
-		String sql = "INSERT INTO user" + "(name,password) values(?,?)";
+		String sql = "INSERT INTO User" + "(name,password) values(?,?)";
 
 		PreparedStatement stmt;
 		try {
@@ -168,7 +168,7 @@ public class DAO {
 	}
 
 	public void addNote(Note note) {
-		String sql = "INSERT INTO note" + "(color, date_created, text, id_user, label) values(?,?,?,?,?)";
+		String sql = "INSERT INTO Note" + "(color, date_created, text, id_user, label) values(?,?,?,?,?)";
 		PreparedStatement stmt;
 		try {
 			stmt = connection.prepareStatement(sql);
@@ -189,10 +189,10 @@ public class DAO {
 	public void removeUser(Integer id) {
 		PreparedStatement stmt;
 		try {
-			stmt = connection.prepareStatement("DELETE FROM note WHERE id_user=?");
+			stmt = connection.prepareStatement("DELETE FROM Note WHERE id_user=?");
 			stmt.setInt(1, id);
 			stmt.execute();
-			stmt = connection.prepareStatement("DELETE FROM user WHERE id_user=?");
+			stmt = connection.prepareStatement("DELETE FROM User WHERE id_user=?");
 			stmt.setInt(1, id);
 			stmt.execute();
 			stmt.close();
@@ -205,7 +205,7 @@ public class DAO {
 	public void removeNote(Integer id) {
 		PreparedStatement stmt;
 		try {
-			stmt = connection.prepareStatement("DELETE FROM note WHERE id_note=?");
+			stmt = connection.prepareStatement("DELETE FROM Note WHERE id_note=?");
 			stmt.setInt(1, id);
 			stmt.execute();
 			stmt.close();
@@ -215,7 +215,7 @@ public class DAO {
 	}
 
 	public void updateUser(User user) {
-		String sql = "UPDATE user SET " + "name=?, password=? WHERE id_user=?";
+		String sql = "UPDATE User SET " + "name=?, password=? WHERE id_user=?";
 		PreparedStatement stmt;
 		try {
 			stmt = connection.prepareStatement(sql);
@@ -231,7 +231,7 @@ public class DAO {
 	}
 
 	public void updateNote(Note note) {
-		String sql = "UPDATE note SET " + "date_created=?, text=?, label=? WHERE id_note=?";
+		String sql = "UPDATE Note SET " + "date_created=?, text=?, label=? WHERE id_note=?";
 		PreparedStatement stmt;
 		try {
 			stmt = connection.prepareStatement(sql);

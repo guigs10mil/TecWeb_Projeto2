@@ -5,7 +5,7 @@
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.Calendar"%>
-<%@ page import="keep.Note"%>
+<%@ page import="mvc.model.Note"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,16 +14,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1.0" />
-<jsp:useBean id="dao" class="keep.DAO" />
+<jsp:useBean id="dao" class="mvc.model.DAO" />
 <title>Holy Note</title>
 
 <!-- CSS  -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	rel="stylesheet">
-<link href="css/materialize.css" type="text/css" rel="stylesheet"
-	media="screen,projection" />
-<link href="css/style.css" type="text/css" rel="stylesheet"
-	media="screen,projection" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 <body>
 	<%
@@ -47,16 +44,16 @@
 	%>
 	<!-- Dropdown Structure -->
 	<ul id="dropdown1" class="dropdown-content">
-		<li><a href="./editUser.jsp">EDIT USER</a></li>
+		<li><a href="editUser">EDIT USER</a></li>
 		<li class="divider"></li>
-		<li class="red"><a href="./index.jsp" style="color: #fff;">SIGN
+		<li class="red"><a href="index" style="color: #fff;">SIGN
 				OUT</a></li>
 	</ul>
 
 	<nav class="deep-orange darken-4">
 		<div class="nav-wrapper container">
 			<div class="row">
-				<a id="logo-container" href="./index.jsp" class="brand-logo">Holy
+				<a id="logo-container" href="index" class="brand-logo">Holy
 					Note</a>
 				<div class="col s6 offset-s3">
 					<div class="input-field center">
@@ -183,7 +180,12 @@
 
 	<!--  Scripts-->
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script src="js/materialize.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 	<script src="js/init.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$(".dropdown-trigger").dropdown();
+		});
+	</script>
 </body>
 </html>
