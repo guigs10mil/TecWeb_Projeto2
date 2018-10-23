@@ -16,5 +16,6 @@ date_created BIGINT(20) NOT NULL,
 text TEXT NOT NULL,
 id_user INT(11) NOT NULL,
 label VARCHAR(15),
+location VARCHAR(100),
 FOREIGN KEY (id_user) REFERENCES User(id_user)
 );

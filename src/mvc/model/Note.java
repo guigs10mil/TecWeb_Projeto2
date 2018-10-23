@@ -10,6 +10,7 @@ public class Note {
 	private Integer idUser;
 	private String label;
 	private String rightdate;
+	private String location;
 
 	public Integer getId() {
 		return this.id;
@@ -65,6 +66,14 @@ public class Note {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 }

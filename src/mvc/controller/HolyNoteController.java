@@ -10,9 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import mvc.model.*;
 
@@ -23,36 +29,64 @@ public class HolyNoteController {
 		return "index";
 	}
 	
-	@RequestMapping("index")
+	@RequestMapping(value="index", method=RequestMethod.GET)
 	public String home() {
 		return "index";
 	}
 	
-	@RequestMapping("signUp")
+	@RequestMapping(value="signUp", method=RequestMethod.GET)
 	public String signUp() {
 		return "signUp";
 	}
 	
-	@RequestMapping("signIn")
+	@RequestMapping(value="signIn", method=RequestMethod.GET)
 	public String signIn() {
 		return "signIn";
 	}
 	
-	@RequestMapping("editUser")
+	@RequestMapping(value="editUser", method=RequestMethod.GET)
 	public String editUser() {
 		return "editUser";
 	}
 	
-	@RequestMapping("addNote")
+	@RequestMapping(value="addNote", method=RequestMethod.POST)
 	public String addNote(Note note, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		DAO dao = new DAO();
 		HttpSession session = request.getSession(true);
 		note.setColor(request.getParameter("color"));
 		note.setDateCreated(Calendar.getInstance());
-		note.setText(request.getParameter("text"));
+		
+		String text = request.getParameter("text");
+		text = text.trim();
+		text = text.replaceAll("\\s+", "+");
+		
+		HttpResponse<JsonNode> jj = null;
+		try {
+			jj = Unirest.get("https://montanaflynn-spellcheck.p.mashape.com/check/?text=" + text)
+			.header("X-Mashape-Key", "SnZq2ejHP1mshQdJWFiVQV2YvnBmp1wIQExjsnEgGwEoz9BqPD")
+			.header("Accept", "application/json")
+			.asJson();
+		} catch (UnirestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		JSONObject myObj = jj.getBody().getObject();
+	    System.out.println(myObj);
+	    
+	    
+	    
+	    if (myObj.get("suggestion").equals(null) | myObj.get("suggestion").equals(false)) {
+	    	note.setText((String)myObj.get("original"));
+	    }
+	    else {
+	    	note.setText((String)myObj.get("suggestion"));
+	    }
+		
 		note.setIdUser((Integer)session.getAttribute("idUser"));
 		note.setLabel(request.getParameter("label"));
+		note.setLocation(request.getParameter("loc"));
 		if (note.getText().length()>0 && note.getLabel().length()>0){
 			dao.addNote(note);
 		}
@@ -61,7 +95,7 @@ public class HolyNoteController {
 	}
 	
 	
-	@RequestMapping("FilterColor")
+	@RequestMapping(value="FilterColor", method=RequestMethod.GET)
 	public String filterColor(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
@@ -77,7 +111,7 @@ public class HolyNoteController {
 		return "notes";
 	}
 	
-	@RequestMapping("removeNote")
+	@RequestMapping(value="removeNote", method=RequestMethod.DELETE)
 	public String removeNote(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         DAO dao = new DAO();
@@ -88,7 +122,7 @@ public class HolyNoteController {
         return "notes";
     }
 	
-	@RequestMapping("removeUser")
+	@RequestMapping(value="removeUser", method=RequestMethod.DELETE)
 	public String removeUser(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		DAO dao = new DAO();
@@ -104,7 +138,7 @@ public class HolyNoteController {
         return "index";
 	}
 	
-	@RequestMapping("searchUser")
+	@RequestMapping(value="searchUser", method=RequestMethod.GET)
 	public String searchUser(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
@@ -126,7 +160,7 @@ public class HolyNoteController {
 		
 		if (dao.verifySignUp(user)) {
 			dao.addUser(user);
-			System.out.println("Sign Up Succeeded! YABOIII");
+			System.out.println("Sign Up Succeeded!");
 			dao.close();
 			return "index";
 		}
@@ -137,15 +171,43 @@ public class HolyNoteController {
 		}
 	}
 	
-	@RequestMapping("updateNote")
+	@RequestMapping(value="updateNote", method=RequestMethod.PUT)
 	public String updateNote(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		DAO dao = new DAO();
 		Note note = new Note();
 		Calendar date = Calendar.getInstance();
 		note.setId(Integer.valueOf(request.getParameter("idNote")));
-		note.setText(request.getParameter("text"));
+		
+		String text = request.getParameter("text");
+		text = text.trim();
+		text = text.replaceAll("\\s+", "+");
+		
+		HttpResponse<JsonNode> jj = null;
+		try {
+			jj = Unirest.get("https://montanaflynn-spellcheck.p.mashape.com/check/?text=" + text)
+			.header("X-Mashape-Key", "SnZq2ejHP1mshQdJWFiVQV2YvnBmp1wIQExjsnEgGwEoz9BqPD")
+			.header("Accept", "application/json")
+			.asJson();
+		} catch (UnirestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		JSONObject myObj = jj.getBody().getObject();
+	    System.out.println(myObj);
+	    
+	    
+	    
+	    if (myObj.get("suggestion").equals(null) | myObj.get("suggestion").equals(false)) {
+	    	note.setText((String)myObj.get("original"));
+	    }
+	    else {
+	    	note.setText((String)myObj.get("suggestion"));
+	    }
+		
 		note.setLabel(request.getParameter("label"));
+		note.setLocation(request.getParameter("loc"));
 		note.setDateCreated(date);
 		dao.updateNote(note);
 
@@ -153,7 +215,7 @@ public class HolyNoteController {
 		return "notes";
 	}
 	
-	@RequestMapping("updateUser")
+	@RequestMapping(value="updateUser", method=RequestMethod.PUT)
 	public String updateUser(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		DAO dao = new DAO();
@@ -174,7 +236,7 @@ public class HolyNoteController {
 		return "notes";
 	}
 	
-	@RequestMapping("verifyLogin")
+	@RequestMapping(value="verifyLogin", method=RequestMethod.GET)
 	public String verifyLogin(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 

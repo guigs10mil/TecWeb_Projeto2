@@ -168,7 +168,7 @@ public class DAO {
 	}
 
 	public void addNote(Note note) {
-		String sql = "INSERT INTO Note" + "(color, date_created, text, id_user, label) values(?,?,?,?,?)";
+		String sql = "INSERT INTO Note" + "(color, date_created, text, id_user, label, location) values(?,?,?,?,?,?)";
 		PreparedStatement stmt;
 		try {
 			stmt = connection.prepareStatement(sql);
@@ -177,6 +177,7 @@ public class DAO {
 			stmt.setString(3, note.getText());
 			stmt.setInt(4, note.getIdUser());
 			stmt.setString(5, note.getLabel());
+			stmt.setString(6, note.getLocation());
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
@@ -231,14 +232,15 @@ public class DAO {
 	}
 
 	public void updateNote(Note note) {
-		String sql = "UPDATE Note SET " + "date_created=?, text=?, label=? WHERE id_note=?";
+		String sql = "UPDATE Note SET " + "date_created=?, text=?, label=?, location=? WHERE id_note=?";
 		PreparedStatement stmt;
 		try {
 			stmt = connection.prepareStatement(sql);
 			stmt.setLong(1, note.getDateCreated());
 			stmt.setString(2, note.getText());
 			stmt.setString(3, note.getLabel());
-			stmt.setInt(4, note.getId());
+			stmt.setString(4, note.getLocation());
+			stmt.setInt(5, note.getId());
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
@@ -298,6 +300,7 @@ public class DAO {
 				note.setText(rs.getString("text"));
 				note.setIdUser(rs.getInt("id_user"));
 				note.setLabel(rs.getString("label"));
+				note.setLocation(rs.getString("location"));
 				notes.add(note);
 			}
 			rs.close();

@@ -89,6 +89,7 @@
 									<div class="input-field col s12">
 										<input placeholder="Label" type="text" name="label">
 									</div>
+									<input placeholder="Label" type="hidden" name="loc" id="loc" value="oi">
 									<div>
 										&nbsp; <label> <input class="with-gap" name="color"
 											type="radio" value="blue" /> <span>Blue</span>
@@ -158,9 +159,11 @@
 									<div class="row" style="margin: 0px;">
 										<div class="chip">${notes.label}</div>
 										<div class="chip">${notes.rightdate}</div>
+										<div class="chip">${notes.location}</div>
 										<input type="hidden" name="label" value="${notes.label}">
 										<input type="hidden" name="idNote" value="${notes.id}">
 										<input type="hidden" name="idUser" value="${notes.idUser}">
+										<input type="hidden" name="loc" id="locNote" value="${notes.location}">
 
 										<button
 											class="btn waves-effect waves-light yellow darken-4 right"
@@ -186,6 +189,20 @@
 		$(document).ready(function() {
 			$(".dropdown-trigger").dropdown();
 		});
+		
+		if (navigator.geolocation) {
+	        navigator.geolocation.getCurrentPosition(function(position){
+	        	
+	        	$.getJSON('https://geocode.xyz/' + position.coords.latitude + ',' + position.coords.longitude + '?json=1', function(data) {
+	    		    //data is the JSON string
+	    		    console.log(data['staddress'] + ', ' + data['stnumber'] + ' - ' + data['city']);
+	    		    document.getElementById('loc').value = data['staddress'] + ', ' + data['stnumber'] + ' - ' + data['city'];
+	    		    document.getElementById('locNote').value = data['staddress'] + ', ' + data['stnumber'] + ' - ' + data['city'];
+	    		});
+	        });
+		}
+		
+		
 	</script>
 </body>
 </html>
